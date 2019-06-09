@@ -1,4 +1,4 @@
-import End from './modules/endScreen.js';
+import End from './modules/endScreen';
 
 const randomize = () => words[Math.floor(Math.random() * words.length)];
 const spaceFill = () => Array(randomWord.length).fill('_');
@@ -91,13 +91,13 @@ const isGameOver = () => {
     if(hasWon()) {
         End.setState({
             randomWord,
-            winOrLose: 'win'
+            result: 'win'
         })
     }
     if(hasLost()) {
         End.setState({
-            chosenWord: randomWord,
-            winOrLose: 'lose'
+            randomWord,
+            result: 'lose'
         })
     }
 }
