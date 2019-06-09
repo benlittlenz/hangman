@@ -56,7 +56,7 @@ body {
 }
 
 .hangman__letters {
-    list-style: none;
+    list-style-type: none;
     max-width: 580px;
     margin: 0 auto;
     display: flex;
@@ -64,7 +64,7 @@ body {
 }
 
 .hangman__letter {
-    list-style: none;
+    list-style-type: none;
     text-transform: uppercase;
     padding: 0.3rem 0.7rem;
     border-radius: 4px;

@@ -1,6 +1,4 @@
-const randomize = () => {
-    return words[Math.floor(Math.random() * words.length)];
-}
+const randomize = () => words[Math.floor(Math.random() * words.length)];
 
 const spaceFill = () => {
     return Array(randomWord.length).fill('_');
@@ -15,7 +13,7 @@ let randomWord,
     guessingWord;
 
 let lives = 7;
-let remainingGuesses = [];
+let guessedLetters = [];
 
 randomWord = randomize();
 guessingWord = spaceFill();
@@ -33,6 +31,17 @@ const home = () => {
 
 HangmanElement.innerHTML = home();
 
+const createLetters = () => {
+    let markup = ``;
+    letters.forEach(letter => {
+        const isActive = isLetterTaken(letter) ? 'hangman__letter--active' : '';
+        markup += `
+        <li class="hangman__letter ${isActive}">${letter}</li>
+        `
+    })
+    return markup
+}
+
 const initPage = () => {
     let markup = `
         <p class="hangman__stats">Lives:
@@ -43,9 +52,7 @@ const initPage = () => {
         <div class="hangman__word">${guessingWord.join("")}</div>
         <p class="hangman__instructions">Pick a letter below to guess the whole word</p>
         <ul class="hangman__letters">
-            ${letters.map(letter => (
-                `<li class="hangman__letter">${letter}</li>`
-            ))}
+            ${createLetters()}
         </ul>
         <button class="button hangman__trigger">Main Menu</button>
     `
@@ -53,12 +60,60 @@ const initPage = () => {
 }
 
 HangmanElement.addEventListener('click', event => {
+    if(event.target.matches('.hangman__letter')) {
+        check(event.target.innerHTML)
+        console.log(event.target.innerHTML)
+    }
     
     if (event.target.matches('.hangman__trigger')) {
         HangmanElement.innerHTML = markup
     }
-})
+});
 
+const isLetterTaken = letter => guessedLetters.includes(letter);
+
+const check = guess => {
+    if(isLetterTaken(guess)) return;
+
+    guessedLetters.push(guess);
+    if(randomWord.includes(guess)) {
+        updateGuessingWord(guess)
+        console.log(guessingWord)
+    } else {
+        lives--
+    }
+
+    render();
+   
+    isGameOver();
+}
+
+const hasWon = () => guessingWord.join('') === randomWord
+const hasLost = () => lives <= 0
+
+const isGameOver = () => {
+    if(hasWon()) {
+        alert('YOu win')
+    }
+    if(hasLost()) {
+        alert('you lose')
+    }
+}
+
+const render = () => {
+    document.querySelector('.hangman__lives').innerHTML = lives;
+    document.querySelector('.hangman__word').innerHTML = guessingWord.join('');
+    document.querySelector('.hangman__letters').innerHTML = createLetters();
+}
+
+const updateGuessingWord = letter => {
+    randomWord.split("").map((elem, index) => {
+        if(elem === letter) {
+            guessingWord[index] = elem;
+        }
+        
+    })
+}
 
 
 document.querySelector('.start').addEventListener('click', () => {
