@@ -1,4 +1,5 @@
 import End from './modules/endScreen.js';
+import Board from './modules/Board.js';
 
 const randomize = () => words[Math.floor(Math.random() * words.length)];
 const spaceFill = () => Array(randomWord.length).fill('_');
@@ -55,7 +56,10 @@ const initPage = () => {
         <button class="button hangman__trigger">Main Menu</button>
     `
     HangmanElement.innerHTML = markup;
+    Board.init();
 }
+
+
 
 HangmanElement.addEventListener('click', event => {
     if(event.target.matches('.hangman__letter')) {
@@ -77,6 +81,7 @@ const check = guess => {
         updateGuessingWord(guess)
     } else {
         lives--
+        Board.setLives(lives);
     }
 
     render();
